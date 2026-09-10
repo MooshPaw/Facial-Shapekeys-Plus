@@ -10,6 +10,13 @@ FACE_TRACKING_FOLDER_NAME = "---Face Tracking---"
 BLENDED_SHAPES_FOLDER_NAME = "---Blended Shapes---"
 
 
+# Visemes folder - uses the 15 visemes from Oculus
+VISEMES = (
+    'vrc.v_aa', 'vrc.v_ch', 'vrc.v_dd', 'vrc.v_e', 'vrc.v_ff',
+    'vrc.v_ih', 'vrc.v_kk', 'vrc.v_nn', 'vrc.v_oh', 'vrc.v_ou',
+    'vrc.v_pp', 'vrc.v_rr', 'vrc.v_sil', 'vrc.v_ss', 'vrc.v_th',
+)
+
 # The 52 standard ARKit / Apple ARKitFaceAnchor blend shape locations.
 ARKIT_SHAPES = (
     'browDownLeft', 'browDownRight', 'browInnerUp', 'browOuterUpLeft', 'browOuterUpRight',
