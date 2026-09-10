@@ -24,10 +24,16 @@ Click-holding or click-dragging on one of the **Add** / **Copy** / **Remove** si
 > Control where shape keys are automatically placed after specific operations.
 
 - **Copy Shape Key**
-> Copy the shape key, its driver, and all or some of its properties. Capable of copying and mirroring at the same time.
+> Copy the shape key, its driver, and all or some of its properties. Capable of copying and mirroring at the same time. Mirrored copies automatically detect and rename Left/Right (and similar) naming conventions using Blender's own name-flipping logic.
+
+- **Copy Shape Key, Inverted**
+> Duplicate a shape key and invert it relative to its relative key - equivalent to blending it to -1 and baking the result into a new shape key.
+
+- **ARKit / Unified Expressions Automation**
+> Automatically generate all 52 empty ARKit blend shapes, or the full Unified Expressions Base/Blended shape set, each parented into auto-created "---Face Tracking---" (and, for Unified Expressions, a nested "---Blended Shapes---") folder.
 
 - **Multi-Selection**
-> Perform basic operations on multiple shape keys and folders at once. Compatible with “New Shape From Mix” as it creates a new shape out of a mix of the selected shape keys. Features compatible with multi-selection become exposed when at least one shape key or folder is selected.
+> Perform basic operations on multiple shape keys and folders at once. Compatible with “New Combined” as it creates a new shape out of a mix of the selected shape keys, even if some of them currently have a value of 0. Features compatible with multi-selection become exposed when at least one shape key or folder is selected.
 
 - **Driver Sub-Panel**
 > View and edit the driver for a shape key’s value directly within the Shape Keys+ panel.

@@ -52,6 +52,22 @@ class MESH_MT_skp_shape_key_copy_context_menu(bpy.types.Menu):
         row = layout.row()
         row.enabled = not selections
         
+        op = row.operator(
+            operator='object.skp_shape_key_copy',
+            text=core.strings['menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Inverted]'],
+            translate=False,
+            icon='REMOVE')
+        
+        op.mirror = 0
+        op.select = False
+        op.custom = False
+        op.invert = True
+        
+        layout.separator(factor=0.5)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
         if selections:
             row.operator(
                 operator='object.skp_shape_key_copy',
@@ -101,6 +117,17 @@ class MESH_MT_skp_shape_key_copy_context_menu_selected(bpy.types.Menu):
         op.mirror = 2
         op.select = True
         op.custom = False
+        
+        op = layout.operator(
+            operator='object.skp_shape_key_copy',
+            text=core.strings['menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Inverted]'],
+            translate=False,
+            icon='REMOVE')
+        
+        op.mirror = 0
+        op.select = True
+        op.custom = False
+        op.invert = True
         
         layout.separator(factor=0.5)
         

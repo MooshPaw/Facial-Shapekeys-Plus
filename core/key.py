@@ -1,4 +1,5 @@
 import bpy
+import array
 
 from bpy.app.translations import pgettext_data
 
@@ -43,6 +44,32 @@ def get_driver(key, fcurve=False):
     return None
 
 
+def invert_data(key):
+    """
+    Inverts a shape key's vertex offsets relative to its relative key, in place.
+    
+    This has the same result as blending the shape key to a value of -1.0 relative to its relative key
+    (usually the Basis), then baking that pose into a new shape key at a value of 1.0.
+    """
+    rel = key.relative_key
+    
+    if not rel or rel == key or not len(key.data):
+        return
+    
+    count = len(key.data) * 3
+    
+    key_co = array.array('f', [0.0]) * count
+    rel_co = array.array('f', [0.0]) * count
+    
+    key.data.foreach_get('co', key_co)
+    rel.data.foreach_get('co', rel_co)
+    
+    # new = rel - (key - rel) = (2 * rel) - key
+    inverted_co = array.array('f', (2.0 * r - k for r, k in zip(rel_co, key_co)))
+    
+    key.data.foreach_set('co', inverted_co)
+
+
 def add(type='DEFAULT'):
     obj = bpy.context.object
     
@@ -61,6 +88,30 @@ def add(type='DEFAULT'):
         
         for i in exclude:
             obj.data.shape_keys.key_blocks[i].mute = False
+        
+        deselect()
+    elif type == 'COMBINED_SELECTED' and obj.data.shape_keys:
+        # Like FROM_MIX_SELECTED, but every selected shape key is temporarily forced to a value of 1.0,
+        # so that a full-strength combination is created even if some (or all) selected values are 0.
+        exclude = []
+        forced = []
+        
+        for i, key in enumerate(obj.data.shape_keys.key_blocks):
+            if is_selected(key):
+                if key.value != 1.0:
+                    forced.append((i, key.value))
+                    key.value = 1.0
+            elif not key.mute:
+                key.mute = True
+                exclude.append(i)
+        
+        new_key = obj.shape_key_add(from_mix=True)
+        
+        for i in exclude:
+            obj.data.shape_keys.key_blocks[i].mute = False
+        
+        for i, old_value in forced:
+            obj.data.shape_keys.key_blocks[i].value = old_value
         
         deselect()
     else:
@@ -129,7 +180,7 @@ def reselect(selections):
             select(name, True)
 
 
-def copy(original_key, mirror=0, custom=False):
+def copy(original_key, mirror=0, custom=False, invert=False):
     obj = bpy.context.object
     shape_keys = obj.data.shape_keys
     key_blocks = shape_keys.key_blocks
@@ -167,10 +218,17 @@ def copy(original_key, mirror=0, custom=False):
     if mirror > 0:
         bpy.ops.object.shape_key_mirror(use_topology=mirror == 2)
         
-        if old_name.endswith(".L"):
-            new_name = old_name[:-2] + ".R"
-        elif old_name.endswith(".R"):
-            new_name = old_name[:-2] + ".L"
+        # bpy.utils.flip_name() handles many more naming conventions than a plain ".L"/".R" suffix,
+        # including "_L"/"_R", "Left"/"Right", "LEFT"/"RIGHT", etc. If no side is detected in the name,
+        # it returns the name unchanged, in which case the copy keeps its original name (Blender will
+        # auto-disambiguate it, e.g. "Name.001").
+        flipped_name = bpy.utils.flip_name(old_name)
+        
+        if flipped_name != old_name:
+            new_name = flipped_name
+    
+    if invert and not is_folder:
+        new_name = core.strings['core.key.copy.new_name[%s Inverted]'] % new_name
     
     new_relative_key = old_relative_key if (not custom or not cc.use_relative_key) else cc.relative_key
     
@@ -183,6 +241,9 @@ def copy(original_key, mirror=0, custom=False):
     new_key.relative_key = key_blocks[new_relative_key] if new_relative_key else key_blocks[0]
     new_key.interpolation = old_interpolation if (not custom or not cc.use_interpolation) else cc.interpolation
     new_key.mute = old_mute if (not custom or not cc.use_mute) else cc.mute
+    
+    if invert and not is_folder:
+        invert_data(new_key)
     
     if anim and anim.drivers:
         data_path = "key_blocks[\"%s\"].value" % new_key.name

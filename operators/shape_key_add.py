@@ -15,6 +15,7 @@ class OBJECT_OT_skp_shape_key_add(bpy.types.Operator):
             ('DEFAULT', "", ""),
             ('FROM_MIX', "", ""),
             ('FROM_MIX_SELECTED', "", ""),
+            ('COMBINED_SELECTED', "", ""),
             ('FOLDER', "", "")
         ),
         default='DEFAULT',

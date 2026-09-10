@@ -9,9 +9,9 @@ from . import panels
 from . import properties
 
 bl_info = {
-    "name": "Shape Keys+",
-    "author": "Michael Glen Montague",
-    "version": (2, 0, 3),
+    "name": "Facial-Shapekeys+",
+    "author": "MooshPaw - Michael Glen Montague",
+    "version": (2, 1, 0),
     "blender": (2, 93, 0),
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
@@ -24,9 +24,9 @@ bl_info = {
 # bl_info is parsed before the add-on is loaded, so its translations have to be copied by hand or a script.
 
 bl_info_en_US = {
-    "name": "Shape Keys+",
-    "author": "Michael Glen Montague",
-    "version": (2, 0, 3),
+    "name": "Facial-Shapekeys+",
+    "author": "MooshPaw - Michael Glen Montague",
+    "version": (2, 1, 0),
     "blender": (2, 93, 0),
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
@@ -36,9 +36,9 @@ bl_info_en_US = {
     "category": "Object"
 }
 bl_info_ja_JP = {
-    "name": "シェイプキープラス (Shape Keys+)",
-    "author": "Michael Glen Montague （マイケルグレンモンタギュー）",
-    "version": (2, 0, 3),
+    "name": "Facial-Shapekeys+",
+    "author": "MooshPaw - Michael Glen Montague",
+    "version": (2, 1, 0),
     "blender": (2, 93, 0),
     "location": "プロパティ ⇒ オブジェクトデータ ⇒ シェイプキープラス",
     "description": "シェイプキーを作成したり整理したり見せたりドライブしたりのための余分設定を入っているパネルを追加します。",
@@ -416,6 +416,8 @@ classes = (
     operators.FolderToggle,
     operators.FolderUngroup,
     operators.ShapeKeyAdd,
+    operators.ShapeKeyAddARKit,
+    operators.ShapeKeyAddUnifiedExpressions,
     operators.ShapeKeyCopy,
     operators.ShapeKeyMirror,
     operators.ShapeKeyMove,

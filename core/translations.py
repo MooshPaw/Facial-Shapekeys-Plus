@@ -71,14 +71,18 @@ _strings_src = {
     
     # shape_keys_plus/menus/shape_key_add_context_menus.py
     'menus.ShapeKeyAddContextMenu.bl_label': "Shape Key Add Specials",
-    'menus.ShapeKeyAddContextMenu.draw.operator[New Shape From Mix]': "New Shape From Mix",
+    'menus.ShapeKeyAddContextMenu.draw.operator[New Combined]': "New Combined",
     'menus.ShapeKeyAddContextMenu.draw.operator[New Folder]': "New Folder",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Add ARKit Blend Shapes]': "Add ARKit Blend Shapes",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Add Unified Expressions Blend Shapes]':
+        "Add Unified Expressions Blend Shapes",
     
     # shape_keys_plus/menus/shape_key_copy_context_menus.py
     'menus.ShapeKeyCopyContextMenu.bl_label': "Shape Key Copy Specials",
     'menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Mirrored]': "Copy Shape Key, Mirrored",
     'menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Mirrored (Topology)]':
         "Copy Shape Key, Mirrored (Topology)",
+    'menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Inverted]': "Copy Shape Key, Inverted",
     'menus.ShapeKeyCopyContextMenu.draw.operator[Copy Shape Key, Customized]': "Copy Shape Key, Customized",
     
     'menus.ShapeKeyCopyContextMenuSelected.draw.operator[Copy Shape Key]': "Copy Shape Key",
@@ -143,6 +147,23 @@ _strings_src = {
     # shape_keys_plus/operators/shape_key_copy.py
     'operators.ShapeKeyCopy.bl_label': "Copy Shape Key",
     'operators.ShapeKeyCopy.bl_description': "Copies active or selected shape key(s)",
+    
+    # shape_keys_plus/core/key.py (copy())
+    'core.key.copy.new_name[%s Inverted]': "%s (Inverted)",
+    
+    # shape_keys_plus/operators/shape_key_face_tracking.py
+    'operators.ShapeKeyAddARKit.bl_label': "Add ARKit Blend Shapes",
+    'operators.ShapeKeyAddARKit.bl_description':
+        "Creates empty ARKit blend shapes and parents them to a \"---Face Tracking---\" folder",
+    'operators.ShapeKeyAddARKit.execute.report[Skipped %s]':
+        "%s ARKit blend shape(s) already existed and were skipped",
+    
+    'operators.ShapeKeyAddUnifiedExpressions.bl_label': "Add Unified Expressions Blend Shapes",
+    'operators.ShapeKeyAddUnifiedExpressions.bl_description':
+        "Creates empty Unified Expressions blend shapes and parents them to \"---Face Tracking---\" and "
+        "\"---Blended Shapes---\" folders",
+    'operators.ShapeKeyAddUnifiedExpressions.execute.report[Skipped %s]':
+        "%s Unified Expressions blend shape(s) already existed and were skipped",
     
     # shape_keys_plus/operators/shape_key_mirror.py
     'operators.ShapeKeyMirror.bl_label': "Mirror Shape Key",
@@ -397,7 +418,6 @@ elif language == 'ja_JP':
     
     # shape_keys_plus/menus/shape_key_add_context_menus.py
     strings['menus.ShapeKeyAddContextMenu.bl_label'] = "シェイプキー作成の特別"
-    strings['menus.ShapeKeyAddContextMenu.draw.operator[New Shape From Mix]'] = "ミックスからシェイプを作成"
     strings['menus.ShapeKeyAddContextMenu.draw.operator[New Folder]'] = "フォルダを作成"
     
     # shape_keys_plus/menus/shape_key_copy_context_menus.py

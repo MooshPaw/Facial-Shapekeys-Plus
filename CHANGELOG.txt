@@ -1,3 +1,20 @@
+v2.1.0
+    - MINOR
+        • Added "Copy Shape Key, Inverted", which duplicates the active/selected shape key(s) and inverts
+            the result relative to its relative key (equivalent to blending it to a value of -1 and baking that).
+        • Added "Add ARKit Blend Shapes", which creates all 52 standard (empty) ARKit blend shapes and
+            automatically parents them to a "---Face Tracking---" folder.
+        • Added "Add Unified Expressions Blend Shapes", which creates the Unified Expressions standard's
+            Base Shapes and Blended Shapes (empty), parenting them to a "---Face Tracking---" folder and a
+            nested "---Blended Shapes---" folder, respectively.
+        • Mirrored copies/duplicates now use Blender's own `bpy.utils.flip_name()` to detect and rename the
+            Left/Right side of a shape key's name, instead of only recognizing a ".L"/".R" suffix. This also
+            applies to the standalone "Mirror Shape Key" operator.
+        • Renamed "New Shape From Mix" to "New Combined", matching Blender's own terminology. When used with
+            a group of selected shape keys, each selected shape key is now temporarily forced to a value of
+            1.0 while combining, so a full-strength combined shape key is created even if some (or all) of the
+            selected shape keys currently have a value of 0.
+
 v2.0.3
     - PATCH
         • Allowed add-on to be installed directly from a git clone.

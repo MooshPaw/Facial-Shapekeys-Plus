@@ -13,6 +13,7 @@ class OBJECT_OT_skp_shape_key_copy(bpy.types.Operator):
     mirror: bpy.props.IntProperty(options={'HIDDEN'})
     select: bpy.props.BoolProperty(options={'HIDDEN'})
     custom: bpy.props.BoolProperty(options={'HIDDEN'})
+    invert: bpy.props.BoolProperty(options={'HIDDEN'})
     
     @classmethod
     def poll(cls, context):
@@ -43,7 +44,7 @@ class OBJECT_OT_skp_shape_key_copy(bpy.types.Operator):
                 
                 for key in [key_blocks[i]] + core.folder.get_children(key_blocks[i]):
                     index = key_blocks.find(key.name)
-                    copy = core.key.copy(key, self.mirror, self.custom)
+                    copy = core.key.copy(key, self.mirror, self.custom, self.invert)
                     
                     if index in selections:
                         selected_copies.append(copy.name)
@@ -91,7 +92,7 @@ class OBJECT_OT_skp_shape_key_copy(bpy.types.Operator):
             active_copy = None
             
             for key in [active_key] + core.folder.get_children(active_key):
-                copy = core.key.copy(key, self.mirror, self.custom)
+                copy = core.key.copy(key, self.mirror, self.custom, self.invert)
                 
                 if not active_copy:
                     active_copy = copy.name

@@ -46,12 +46,13 @@ class OBJECT_OT_skp_shape_key_mirror(bpy.types.Operator):
             obj.active_shape_key_index = key_blocks.find(name)
             bpy.ops.object.shape_key_mirror(use_topology=self.use_topology)
             
-            if name.endswith(".L"):
-                name = name[:-2] + ".R"
-            elif name.endswith(".R"):
-                name = name[:-2] + ".L"
+            # bpy.utils.flip_name() recognizes many naming conventions (".L"/".R", "_L"/"_R",
+            # "Left"/"Right", "LEFT"/"RIGHT", etc.). If no side is detected, the name is returned
+            # unchanged, and the shape key simply keeps its current name.
+            flipped_name = bpy.utils.flip_name(name)
             
-            key.name = name
+            if flipped_name != name:
+                key.name = flipped_name
         
         obj.active_shape_key_index = original_index
         

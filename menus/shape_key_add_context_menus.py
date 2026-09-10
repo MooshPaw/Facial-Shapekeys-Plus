@@ -27,7 +27,7 @@ class MESH_MT_skp_shape_key_add_context_menu(bpy.types.Menu):
         op = row.operator(
             operator='object.skp_shape_key_add',
             icon='MOD_HUE_SATURATION',
-            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[New Shape From Mix]'],
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[New Combined]'],
             translate=False)
         
         op.type = 'FROM_MIX'
@@ -43,6 +43,26 @@ class MESH_MT_skp_shape_key_add_context_menu(bpy.types.Menu):
             translate=False)
         
         op.type = 'FOLDER'
+        
+        layout.separator(factor=0.5)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_add_arkit',
+            icon='FACESEL',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Add ARKit Blend Shapes]'],
+            translate=False)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_add_unified_expressions',
+            icon='FACESEL',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Add Unified Expressions Blend Shapes]'],
+            translate=False)
 
 
 class MESH_MT_skp_shape_key_add_context_menu_selected(bpy.types.Menu):
@@ -54,7 +74,7 @@ class MESH_MT_skp_shape_key_add_context_menu_selected(bpy.types.Menu):
         op = layout.operator(
             operator='object.skp_shape_key_add',
             icon='MOD_HUE_SATURATION',
-            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[New Shape From Mix]'],
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[New Combined]'],
             translate=False)
         
-        op.type = 'FROM_MIX_SELECTED'
+        op.type = 'COMBINED_SELECTED'
