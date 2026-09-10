@@ -1,4 +1,4 @@
-# Better Shapekeys
+# Facial Shapekeys+
 
 A fork of [Shape Keys+](https://github.com/MichaelGlenMontague/shape_keys_plus) with a big focus on improving the automatization and workflow on Face Tracking blendshapes (ARKit and UE)
 
