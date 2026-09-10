@@ -16,8 +16,8 @@ bl_info = {
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
     "warning": "",
-    "doc_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/wiki",
-    "tracker_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/issues",
+    "doc_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/wiki",
+    "tracker_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/issues",
     "category": "Object"
 }
 
@@ -31,8 +31,8 @@ bl_info_en_US = {
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
     "warning": "",
-    "doc_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/wiki",
-    "tracker_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/issues",
+    "doc_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/wiki",
+    "tracker_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/issues",
     "category": "Object"
 }
 bl_info_ja_JP = {
@@ -40,11 +40,11 @@ bl_info_ja_JP = {
     "author": "MooshPaw - Michael Glen Montague",
     "version": (2, 1, 0),
     "blender": (2, 93, 0),
-    "location": "プロパティ ⇒ オブジェクトデータ ⇒ シェイプキープラス",
-    "description": "シェイプキーを作成したり整理したり見せたりドライブしたりのための余分設定を入っているパネルを追加します。",
+    "location": "プロパティ ⇒ オブジェクトデータ ⇒ シェイプキー+",
+    "description": "シェイプキーの作成、整理、表示、操作を行うための追加オプションを備えたパネルを追加します。",
     "warning": "",
-    "doc_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/wiki",
-    "tracker_url": "https://github.com/MichaelGlenMontague/shape_keys_plus/issues",
+    "doc_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/wiki",
+    "tracker_url": "https://github.com/MooshPaw/Facial-Shapekeys-Plus/issues",
     "category": "Object"
 }
 
