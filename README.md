@@ -78,6 +78,7 @@ Allows you to quickly remove ALL shapekeys
 # AI Disclaimer
 
 YES, I know
+
 If you don't like AI, feel free to fork this and redo the code yourself, or try to implement the new features from the original add-on. I'm a designer, not a programmer, even though I helped with simple things such as the Blendshape list for each nomenclature, 95% of the modifications are made by Claude, as I can't find anyone who would do these features quick enough, and the original repo has been archived.
 
 With all of that said, the AI didn't generate much bloat and stuck to making the new features with a couple lines of code. The automations are very fast (basically instant tbh) and at the end of the day, it's intended to make my and other people's workflow faster and easier. AI helped me get this tool out and make my work twice as fast, so I can't be upset by that. But it's something YOU should know for transparency.
