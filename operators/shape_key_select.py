@@ -24,6 +24,23 @@ class OBJECT_OT_skp_shape_key_select(bpy.types.Operator):
     def poll(cls, context):
         return context.object and context.object.data.shape_keys
     
+    def invoke(self, context, event):
+        # Shift+Click and Ctrl+Click on a shape key's checkbox both select every shape key between the
+        # currently active row and the clicked one (inclusive), in addition to whatever is already selected.
+        if self.mode == 'TOGGLE' and (event.shift or event.ctrl):
+            obj = context.object
+            anchor = obj.active_shape_key_index
+            start, end = sorted((anchor, self.index))
+            
+            for i in range(start, end + 1):
+                core.key.select(i, True)
+            
+            obj.active_shape_key_index = self.index
+            
+            return {'FINISHED'}
+        
+        return self.execute(context)
+    
     def execute(self, context):
         obj = context.object
         shape_keys = obj.data.shape_keys

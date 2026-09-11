@@ -180,7 +180,7 @@ def reselect(selections):
             select(name, True)
 
 
-def copy(original_key, mirror=0, custom=False, invert=False):
+def copy(original_key, mirror=0, custom=False, invert=False, rename=None):
     obj = bpy.context.object
     shape_keys = obj.data.shape_keys
     key_blocks = shape_keys.key_blocks
@@ -229,6 +229,10 @@ def copy(original_key, mirror=0, custom=False, invert=False):
     
     if invert and not is_folder:
         new_name = core.strings['core.key.copy.new_name[%s Inverted]'] % new_name
+    
+    # An explicit rename (e.g. for face tracking standard translation/conversion) always wins.
+    if rename is not None:
+        new_name = rename
     
     new_relative_key = old_relative_key if (not custom or not cc.use_relative_key) else cc.relative_key
     

@@ -76,6 +76,12 @@ _strings_src = {
     'menus.ShapeKeyAddContextMenu.draw.operator[Add ARKit Blend Shapes]': "Add ARKit Blend Shapes",
     'menus.ShapeKeyAddContextMenu.draw.operator[Add Unified Expressions Blend Shapes]':
         "Add Unified Expressions Blend Shapes",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Add Custom Blend Shapes]': "Add Custom Blend Shapes",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Add Visemes]': "Add Visemes",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Translate ARKit -> Unified Expressions]':
+        "Translate ARKit → Unified Expressions",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Translate Unified Expressions -> ARKit]':
+        "Translate Unified Expressions → ARKit",
     
     # shape_keys_plus/menus/shape_key_copy_context_menus.py
     'menus.ShapeKeyCopyContextMenu.bl_label': "Shape Key Copy Specials",
@@ -164,6 +170,29 @@ _strings_src = {
         "\"---Blended Shapes---\" folders",
     'operators.ShapeKeyAddUnifiedExpressions.execute.report[Skipped %s]':
         "%s Unified Expressions blend shape(s) already existed and were skipped",
+    
+    'operators.ShapeKeyAddUnifiedExpressionsCustom.bl_label': "Add Custom Blend Shapes",
+    'operators.ShapeKeyAddUnifiedExpressionsCustom.bl_description':
+        "Creates empty blend shapes from the addon's custom Unified Expressions preset, in the preset's own "
+        "order, and parents them to \"---Face Tracking---\" and \"---Blended Shapes---\" folders",
+    'operators.ShapeKeyAddUnifiedExpressionsCustom.execute.report[Skipped %s]':
+        "%s custom blend shape(s) already existed and were skipped",
+    
+    'operators.ShapeKeyAddVisemes.bl_label': "Add Visemes",
+    'operators.ShapeKeyAddVisemes.bl_description':
+        "Creates empty viseme blend shapes and parents them to a standalone \"---Visemes---\" folder",
+    'operators.ShapeKeyAddVisemes.execute.report[Skipped %s]': "%s viseme(s) already existed and were skipped",
+    
+    'operators.ShapeKeyTranslateFaceTracking.bl_label': "Translate Face Tracking Blend Shapes",
+    'operators.ShapeKeyTranslateFaceTracking.description[ARKit -> Unified]':
+        "Duplicates existing ARKit blend shapes, translating each one into its Unified Expressions equivalent, "
+        "and parents the results to \"---Face Tracking---\"",
+    'operators.ShapeKeyTranslateFaceTracking.description[Unified -> ARKit]':
+        "Duplicates existing Unified Expressions blend shapes, translating each one into its ARKit equivalent, "
+        "and parents the results to \"---Face Tracking---\"",
+    'operators.ShapeKeyTranslateFaceTracking.execute.report[No Shapes Found]':
+        "No matching blend shapes were found to translate",
+    'operators.ShapeKeyTranslateFaceTracking.execute.report[%s Translated]': "%s blend shape(s) translated",
     
     # shape_keys_plus/operators/shape_key_mirror.py
     'operators.ShapeKeyMirror.bl_label': "Mirror Shape Key",

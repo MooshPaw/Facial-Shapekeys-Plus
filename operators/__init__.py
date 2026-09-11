@@ -8,6 +8,11 @@ from .shape_key_add import OBJECT_OT_skp_shape_key_add as ShapeKeyAdd
 from .shape_key_copy import OBJECT_OT_skp_shape_key_copy as ShapeKeyCopy
 from .shape_key_face_tracking import OBJECT_OT_skp_shape_key_add_arkit as ShapeKeyAddARKit
 from .shape_key_face_tracking import OBJECT_OT_skp_shape_key_add_unified_expressions as ShapeKeyAddUnifiedExpressions
+from .shape_key_face_tracking import (
+    OBJECT_OT_skp_shape_key_add_unified_expressions_custom as ShapeKeyAddUnifiedExpressionsCustom)
+from .shape_key_face_tracking import OBJECT_OT_skp_shape_key_add_visemes as ShapeKeyAddVisemes
+from .shape_key_face_tracking import (
+    OBJECT_OT_skp_shape_key_translate_face_tracking as ShapeKeyTranslateFaceTracking)
 from .shape_key_mirror import OBJECT_OT_skp_shape_key_mirror as ShapeKeyMirror
 from .shape_key_move import OBJECT_OT_skp_shape_key_move as ShapeKeyMove
 from .shape_key_parent import OBJECT_OT_skp_shape_key_parent as ShapeKeyParent

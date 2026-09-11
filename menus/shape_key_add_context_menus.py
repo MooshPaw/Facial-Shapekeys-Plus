@@ -63,6 +63,48 @@ class MESH_MT_skp_shape_key_add_context_menu(bpy.types.Menu):
             icon='FACESEL',
             text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Add Unified Expressions Blend Shapes]'],
             translate=False)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_add_unified_expressions_custom',
+            icon='FACESEL',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Add Custom Blend Shapes]'],
+            translate=False)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_add_visemes',
+            icon='FACESEL',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Add Visemes]'],
+            translate=False)
+        
+        layout.separator(factor=0.5)
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_translate_face_tracking',
+            icon='FILE_REFRESH',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Translate ARKit -> Unified Expressions]'],
+            translate=False)
+        
+        op.direction = 'ARKIT_TO_UNIFIED'
+        
+        row = layout.row()
+        row.enabled = not selections
+        
+        op = row.operator(
+            operator='object.skp_shape_key_translate_face_tracking',
+            icon='FILE_REFRESH',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Translate Unified Expressions -> ARKit]'],
+            translate=False)
+        
+        op.direction = 'UNIFIED_TO_ARKIT'
 
 
 class MESH_MT_skp_shape_key_add_context_menu_selected(bpy.types.Menu):

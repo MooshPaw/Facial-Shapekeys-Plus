@@ -1,3 +1,22 @@
+v2.2.0
+    - MINOR
+        • Reworked the face tracking auto-folder system: "Add ARKit Blend Shapes" now creates its shapes
+            inside a "---ARKit---" folder, and "Add Unified Expressions Blend Shapes" inside a
+            "---Unified Expressions---" folder - both nested under a shared "---Face Tracking---" root folder.
+            "---Blended Shapes---" is now a sibling of "---Unified Expressions---" (rather than nested inside
+            it), created immediately after it so it's positioned below it.
+        • Added "Add Custom Blend Shapes", which creates the addon's curated custom Unified Expressions preset
+            (in its own order, with its own exclusions) using the same "---Face Tracking---" folder structure.
+        • Added "Add Visemes", which creates the 15 Oculus/VRChat visemes in a standalone "---Visemes---"
+            folder (not nested under "---Face Tracking---").
+        • Added "Translate ARKit → Unified Expressions" and "Translate Unified Expressions → ARKit", which
+            duplicate existing blend shapes and rename the duplicates to their equivalent in the other
+            standard, using VRCFaceTracking's official ARKit compatibility table. Results are parented to a
+            "---Unified Expressions---" or "---ARKit---" folder (under "---Face Tracking---"), with
+            Unified Expressions results that belong to "Blended Shapes" routed there automatically.
+        • Shift+Click and Ctrl+Click on a shape key's selection checkbox now both select every shape key
+            between the active row and the clicked one (inclusive), in addition to the existing selection.
+
 v2.1.0
     - MINOR
         • Added "Copy Shape Key, Inverted", which duplicates the active/selected shape key(s) and inverts

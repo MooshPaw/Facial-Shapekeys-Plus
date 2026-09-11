@@ -7,7 +7,13 @@ from .. import memory
 # These folder names are literal shape key / vertex group data (not UI text), so they are
 # intentionally not run through core.strings translation.
 FACE_TRACKING_FOLDER_NAME = "---Face Tracking---"
+ARKIT_FOLDER_NAME = "---ARKit---"
+UNIFIED_EXPRESSIONS_FOLDER_NAME = "---Unified Expressions---"
 BLENDED_SHAPES_FOLDER_NAME = "---Blended Shapes---"
+VISEMES_FOLDER_NAME = "---Visemes---"
+
+# The marker used in MY_CUSTOM_SHAPES to split "Unified Expressions" entries from "Blended Shapes" entries.
+CUSTOM_BLENDED_SHAPES_MARKER = "---Blended Shapes---"
 
 
 # Visemes folder - uses the 15 visemes from Oculus
@@ -98,7 +104,10 @@ UNIFIED_BLENDED_SHAPES = (
     'MouthTightener',
     'MouthPress',
 )
-# MooshPaw's CUSTSOM PRESET for UE Expressions that are actually in use
+
+# MooshPaw's CUSTOM PRESET for UE Expressions that are actually in use.
+# The '---Blended Shapes---' marker splits base (Unified Expressions) entries from Blended Shapes entries;
+# comment it (and everything after it) out to exclude Blended Shapes from the custom set entirely.
 MY_CUSTOM_SHAPES = (
     # Eye Brows
     'BrowDownLeft', 'BrowDownRight',
@@ -106,12 +115,12 @@ MY_CUSTOM_SHAPES = (
     'BrowLowererLeft', 'BrowLowererRight',
     'BrowOuterUpLeft', 'browOuterUpRight',
     'BrowPinchLeft', 'BrowPinchRight',
-
+    
     # Cheeks
     'CheekPuffLeft', 'CheekPuffRight',
     'CheekSquintLeft', 'CheekSquintRight',
     'CheekSuckLeft', 'CheekSuckRight',
-
+    
     # Eyes
     'EyeClosedLeft', 'EyeClosedRight',
     'EyeSquintLeft', 'EyeSquintRight',
@@ -122,15 +131,15 @@ MY_CUSTOM_SHAPES = (
     'EyeLookUpLeft', 'EyeLookUpRight',
     'EyeDilationLeft', 'EyeDilationRight',
     'EyeConstrictLeft', 'EyeConstrictRight',
-
+    
     # Jaw
     'JawBackward', 'JawForward',
     'JawLeft', 'JawOpen', 'JawRight',
-
+    
     # Lips
     'LipSuckUpperLeft', 'LipSuckUpperRight',
     'LipSuckLowerLeft', 'LipSuckLowerRight',
-
+    
     # Mouth
     'MouthClosed',
     'MouthDimpleLeft', 'MouthDimpleRight',
@@ -142,12 +151,12 @@ MY_CUSTOM_SHAPES = (
     'MouthStretchLeft', 'MouthStretchRight',
     'MouthUpperUpLeft', 'MouthUpperUpRight',
     'MouthLowerDownLeft', 'MouthLowerDownRight',
-
-    #Nose
+    
+    # Nose
     'NoseSneerLeft', 'NoseSneerRight',
     'NasalDilationLeft', 'NasalDilationRight',
     'NasalConstrictLeft', 'NasalConstrictRight',
-
+    
     # Tongue
     'TongueOut',
     'TongueUp', 'TongueDown',
@@ -156,7 +165,7 @@ MY_CUSTOM_SHAPES = (
     'TongueBendDown', 'TongueCurlUp',
     'TongueSquish', 'TongueFlat',
     'TongueTwistLeft', 'TongueTwistRight',
-
+    
     # IF YOU DON'T PLAN ON USING BLENDED SHAPES, PUT A # NEXT TO '---BLENDED SHAPES---,'
     '---Blended Shapes---',
     'BrowInnerUp',
@@ -166,6 +175,64 @@ MY_CUSTOM_SHAPES = (
     'LipFunnel', 'LipPucker',
     'EyesLookDown', 'EyesLookUp',
 )
+
+# The official ARKit <-> Unified Expressions conversion table (docs.vrcft.io/.../compatibility/arkit).
+# Every entry here is a verified, direct 1:1 correspondence - no shape is split or combined.
+ARKIT_UNIFIED_PAIRS = (
+    ('eyeLookUpRight', 'EyeLookUpRight'),
+    ('eyeLookDownRight', 'EyeLookDownRight'),
+    ('eyeLookInRight', 'EyeLookInRight'),
+    ('eyeLookOutRight', 'EyeLookOutRight'),
+    ('eyeLookUpLeft', 'EyeLookUpLeft'),
+    ('eyeLookDownLeft', 'EyeLookDownLeft'),
+    ('eyeLookInLeft', 'EyeLookInLeft'),
+    ('eyeLookOutLeft', 'EyeLookOutLeft'),
+    ('eyeBlinkRight', 'EyeClosedRight'),
+    ('eyeBlinkLeft', 'EyeClosedLeft'),
+    ('eyeSquintRight', 'EyeSquintRight'),
+    ('eyeSquintLeft', 'EyeSquintLeft'),
+    ('eyeWideRight', 'EyeWideRight'),
+    ('eyeWideLeft', 'EyeWideLeft'),
+    ('browDownRight', 'BrowDownRight'),
+    ('browDownLeft', 'BrowDownLeft'),
+    ('browInnerUp', 'BrowInnerUp'),
+    ('browOuterUpRight', 'BrowOuterUpRight'),
+    ('browOuterUpLeft', 'BrowOuterUpLeft'),
+    ('noseSneerRight', 'NoseSneerRight'),
+    ('noseSneerLeft', 'NoseSneerLeft'),
+    ('cheekSquintRight', 'CheekSquintRight'),
+    ('cheekSquintLeft', 'CheekSquintLeft'),
+    ('cheekPuff', 'CheekPuff'),
+    ('jawOpen', 'JawOpen'),
+    ('mouthClose', 'MouthClosed'),
+    ('jawRight', 'JawRight'),
+    ('jawLeft', 'JawLeft'),
+    ('jawForward', 'JawForward'),
+    ('mouthRollUpper', 'LipSuckUpper'),
+    ('mouthRollLower', 'LipSuckLower'),
+    ('mouthFunnel', 'LipFunnel'),
+    ('mouthPucker', 'LipPucker'),
+    ('mouthUpperUpRight', 'MouthUpperUpRight'),
+    ('mouthUpperUpLeft', 'MouthUpperUpLeft'),
+    ('mouthLowerDownRight', 'MouthLowerDownRight'),
+    ('mouthLowerDownLeft', 'MouthLowerDownLeft'),
+    ('mouthSmileRight', 'MouthSmileRight'),
+    ('mouthSmileLeft', 'MouthSmileLeft'),
+    ('mouthFrownRight', 'MouthFrownRight'),
+    ('mouthFrownLeft', 'MouthFrownLeft'),
+    ('mouthStretchRight', 'MouthStretchRight'),
+    ('mouthStretchLeft', 'MouthStretchLeft'),
+    ('mouthDimpleRight', 'MouthDimpleRight'),
+    ('mouthDimpleLeft', 'MouthDimpleLeft'),
+    ('mouthShrugUpper', 'MouthRaiserUpper'),
+    ('mouthShrugLower', 'MouthRaiserLower'),
+    ('mouthPressRight', 'MouthPressRight'),
+    ('mouthPressLeft', 'MouthPressLeft'),
+    ('tongueOut', 'TongueOut'),
+)
+
+ARKIT_TO_UNIFIED = 'ARKIT_TO_UNIFIED'
+UNIFIED_TO_ARKIT = 'UNIFIED_TO_ARKIT'
 
 
 def _find_folder(key_blocks, name):
@@ -184,6 +251,23 @@ def _ensure_basis(obj):
 def _create_folder(name):
     folder = core.key.add(type='FOLDER')
     folder.name = name
+    return folder
+
+
+def _ensure_folder(key_blocks, name, parent, transfers):
+    """
+    Finds or creates a folder by `name`. If it's newly created and `parent` is given, queues a
+    (folder_name, parent_name) transfer onto `transfers`, to be applied later in a single memory.tree()
+    pass. Existing folders (and their current placement in the hierarchy) are left untouched.
+    """
+    folder = _find_folder(key_blocks, name)
+    
+    if not folder:
+        folder = _create_folder(name)
+        
+        if parent is not None:
+            transfers.append((folder.name, parent.name))
+    
     return folder
 
 
@@ -207,6 +291,35 @@ def _add_empty_shapes(obj, names, existing_names):
     return created
 
 
+def _split_custom_shapes():
+    """Splits MY_CUSTOM_SHAPES into (base_shapes, blended_shapes) using the marker string."""
+    if CUSTOM_BLENDED_SHAPES_MARKER in MY_CUSTOM_SHAPES:
+        i = MY_CUSTOM_SHAPES.index(CUSTOM_BLENDED_SHAPES_MARKER)
+        return MY_CUSTOM_SHAPES[:i], MY_CUSTOM_SHAPES[i + 1:]
+    
+    return MY_CUSTOM_SHAPES, ()
+
+
+def _apply_transfers(transfers, shape_targets):
+    """
+    Applies queued folder-nesting `transfers` (a list of (child_name, parent_name) tuples) and
+    shape-to-folder placements `shape_targets` (a list of (shape_name, folder_name) tuples), in a
+    single memory.tree() pass, preserving the given order (earlier entries end up placed first).
+    """
+    if not transfers and not shape_targets:
+        return
+    
+    tree = memory.tree()
+    
+    for child, parent in transfers:
+        tree.transfer(child, parent)
+    
+    for name, folder_name in shape_targets:
+        tree.transfer(name, folder_name)
+    
+    tree.apply()
+
+
 class OBJECT_OT_skp_shape_key_add_arkit(bpy.types.Operator):
     bl_idname = 'object.skp_shape_key_add_arkit'
     bl_label = core.strings['operators.ShapeKeyAddARKit.bl_label']
@@ -228,21 +341,14 @@ class OBJECT_OT_skp_shape_key_add_arkit(bpy.types.Operator):
         
         key_blocks = obj.data.shape_keys.key_blocks
         existing_names = {key.name for key in key_blocks}
+        transfers = []
         
-        folder = _find_folder(key_blocks, FACE_TRACKING_FOLDER_NAME)
-        
-        if not folder:
-            folder = _create_folder(FACE_TRACKING_FOLDER_NAME)
+        face_tracking_folder = _ensure_folder(key_blocks, FACE_TRACKING_FOLDER_NAME, None, transfers)
+        arkit_folder = _ensure_folder(key_blocks, ARKIT_FOLDER_NAME, face_tracking_folder, transfers)
         
         created = _add_empty_shapes(obj, ARKIT_SHAPES, existing_names)
         
-        if created:
-            tree = memory.tree()
-            
-            for name in created:
-                tree.transfer(name, folder.name)
-            
-            tree.apply()
+        _apply_transfers(transfers, [(name, arkit_folder.name) for name in created])
         
         core.utils.show(hidden)
         
@@ -275,36 +381,21 @@ class OBJECT_OT_skp_shape_key_add_unified_expressions(bpy.types.Operator):
         
         key_blocks = obj.data.shape_keys.key_blocks
         existing_names = {key.name for key in key_blocks}
+        transfers = []
         
-        face_tracking_folder = _find_folder(key_blocks, FACE_TRACKING_FOLDER_NAME)
-        
-        if not face_tracking_folder:
-            face_tracking_folder = _create_folder(FACE_TRACKING_FOLDER_NAME)
-        
-        blended_folder = _find_folder(key_blocks, BLENDED_SHAPES_FOLDER_NAME)
-        blended_folder_created_now = False
-        
-        if not blended_folder:
-            blended_folder = _create_folder(BLENDED_SHAPES_FOLDER_NAME)
-            blended_folder_created_now = True
+        face_tracking_folder = _ensure_folder(key_blocks, FACE_TRACKING_FOLDER_NAME, None, transfers)
+        # "---Unified Expressions---" is queued first, then "---Blended Shapes---" - so that, for a
+        # freshly created hierarchy, Blended Shapes always ends up positioned below Unified Expressions.
+        unified_folder = _ensure_folder(key_blocks, UNIFIED_EXPRESSIONS_FOLDER_NAME, face_tracking_folder, transfers)
+        blended_folder = _ensure_folder(key_blocks, BLENDED_SHAPES_FOLDER_NAME, face_tracking_folder, transfers)
         
         base_created = _add_empty_shapes(obj, UNIFIED_BASE_SHAPES, existing_names)
         blended_created = _add_empty_shapes(obj, UNIFIED_BLENDED_SHAPES, existing_names)
         
-        tree = memory.tree()
+        shape_targets = [(name, unified_folder.name) for name in base_created]
+        shape_targets += [(name, blended_folder.name) for name in blended_created]
         
-        # Nest "Blended Shapes" inside "Face Tracking", but only the first time it's created,
-        # so that a user's own re-organization of the hierarchy isn't undone on subsequent runs.
-        if blended_folder_created_now:
-            tree.transfer(blended_folder.name, face_tracking_folder.name)
-        
-        for name in base_created:
-            tree.transfer(name, face_tracking_folder.name)
-        
-        for name in blended_created:
-            tree.transfer(name, blended_folder.name)
-        
-        tree.apply()
+        _apply_transfers(transfers, shape_targets)
         
         core.utils.show(hidden)
         
@@ -314,5 +405,186 @@ class OBJECT_OT_skp_shape_key_add_unified_expressions(bpy.types.Operator):
             self.report(
                 {'INFO'},
                 core.strings['operators.ShapeKeyAddUnifiedExpressions.execute.report[Skipped %s]'] % skipped)
+        
+        return {'FINISHED'}
+
+
+class OBJECT_OT_skp_shape_key_add_unified_expressions_custom(bpy.types.Operator):
+    bl_idname = 'object.skp_shape_key_add_unified_expressions_custom'
+    bl_label = core.strings['operators.ShapeKeyAddUnifiedExpressionsCustom.bl_label']
+    bl_description = core.strings['operators.ShapeKeyAddUnifiedExpressionsCustom.bl_description']
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        obj = context.object
+        valid_types = {'MESH', 'LATTICE', 'CURVE', 'SURFACE'}
+        
+        return obj and obj.mode != 'EDIT' and obj.type in valid_types
+    
+    def execute(self, context):
+        obj = context.object
+        hidden = core.utils.hide(obj)
+        
+        _ensure_basis(obj)
+        
+        key_blocks = obj.data.shape_keys.key_blocks
+        existing_names = {key.name for key in key_blocks}
+        transfers = []
+        
+        base_shapes, blended_shapes = _split_custom_shapes()
+        
+        face_tracking_folder = _ensure_folder(key_blocks, FACE_TRACKING_FOLDER_NAME, None, transfers)
+        unified_folder = _ensure_folder(key_blocks, UNIFIED_EXPRESSIONS_FOLDER_NAME, face_tracking_folder, transfers)
+        
+        base_created = _add_empty_shapes(obj, base_shapes, existing_names)
+        
+        shape_targets = [(name, unified_folder.name) for name in base_created]
+        blended_created = []
+        
+        if blended_shapes:
+            blended_folder = _ensure_folder(key_blocks, BLENDED_SHAPES_FOLDER_NAME, face_tracking_folder, transfers)
+            blended_created = _add_empty_shapes(obj, blended_shapes, existing_names)
+            shape_targets += [(name, blended_folder.name) for name in blended_created]
+        
+        _apply_transfers(transfers, shape_targets)
+        
+        core.utils.show(hidden)
+        
+        skipped = (len(base_shapes) - len(base_created)) + (len(blended_shapes) - len(blended_created))
+        
+        if skipped:
+            self.report(
+                {'INFO'},
+                core.strings['operators.ShapeKeyAddUnifiedExpressionsCustom.execute.report[Skipped %s]'] % skipped)
+        
+        return {'FINISHED'}
+
+
+class OBJECT_OT_skp_shape_key_add_visemes(bpy.types.Operator):
+    bl_idname = 'object.skp_shape_key_add_visemes'
+    bl_label = core.strings['operators.ShapeKeyAddVisemes.bl_label']
+    bl_description = core.strings['operators.ShapeKeyAddVisemes.bl_description']
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    @classmethod
+    def poll(cls, context):
+        obj = context.object
+        valid_types = {'MESH', 'LATTICE', 'CURVE', 'SURFACE'}
+        
+        return obj and obj.mode != 'EDIT' and obj.type in valid_types
+    
+    def execute(self, context):
+        obj = context.object
+        hidden = core.utils.hide(obj)
+        
+        _ensure_basis(obj)
+        
+        key_blocks = obj.data.shape_keys.key_blocks
+        existing_names = {key.name for key in key_blocks}
+        
+        # The Visemes folder is intentionally standalone - not nested under "---Face Tracking---".
+        visemes_folder = _find_folder(key_blocks, VISEMES_FOLDER_NAME)
+        
+        if not visemes_folder:
+            visemes_folder = _create_folder(VISEMES_FOLDER_NAME)
+        
+        created = _add_empty_shapes(obj, VISEMES, existing_names)
+        
+        _apply_transfers([], [(name, visemes_folder.name) for name in created])
+        
+        core.utils.show(hidden)
+        
+        skipped = len(VISEMES) - len(created)
+        
+        if skipped:
+            self.report({'INFO'}, core.strings['operators.ShapeKeyAddVisemes.execute.report[Skipped %s]'] % skipped)
+        
+        return {'FINISHED'}
+
+
+class OBJECT_OT_skp_shape_key_translate_face_tracking(bpy.types.Operator):
+    bl_idname = 'object.skp_shape_key_translate_face_tracking'
+    bl_label = core.strings['operators.ShapeKeyTranslateFaceTracking.bl_label']
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    direction: bpy.props.EnumProperty(
+        items=(
+            (ARKIT_TO_UNIFIED, "", ""),
+            (UNIFIED_TO_ARKIT, "", "")
+        ),
+        options={'HIDDEN'})
+    
+    @classmethod
+    def description(cls, context, properties):
+        key = (
+            'operators.ShapeKeyTranslateFaceTracking.description[ARKit -> Unified]'
+            if properties.direction == ARKIT_TO_UNIFIED else
+            'operators.ShapeKeyTranslateFaceTracking.description[Unified -> ARKit]')
+        
+        return core.strings[key]
+    
+    @classmethod
+    def poll(cls, context):
+        obj = context.object
+        valid_types = {'MESH', 'LATTICE', 'CURVE', 'SURFACE'}
+        
+        return obj and obj.mode != 'EDIT' and obj.type in valid_types and obj.data.shape_keys
+    
+    def execute(self, context):
+        obj = context.object
+        key_blocks = obj.data.shape_keys.key_blocks
+        
+        # Find every pair whose source shape exists and whose destination shape doesn't yet exist.
+        pairs = []
+        
+        for arkit_name, unified_name in ARKIT_UNIFIED_PAIRS:
+            if self.direction == ARKIT_TO_UNIFIED:
+                src_name, dst_name = arkit_name, unified_name
+            else:
+                src_name, dst_name = unified_name, arkit_name
+            
+            if src_name in key_blocks and dst_name not in key_blocks:
+                pairs.append((src_name, dst_name, unified_name))
+        
+        if not pairs:
+            self.report(
+                {'WARNING'},
+                core.strings['operators.ShapeKeyTranslateFaceTracking.execute.report[No Shapes Found]'])
+            
+            return {'CANCELLED'}
+        
+        hidden = core.utils.hide(obj)
+        
+        transfers = []
+        target_folder_name = (
+            UNIFIED_EXPRESSIONS_FOLDER_NAME if self.direction == ARKIT_TO_UNIFIED else ARKIT_FOLDER_NAME)
+        
+        face_tracking_folder = _ensure_folder(key_blocks, FACE_TRACKING_FOLDER_NAME, None, transfers)
+        target_folder = _ensure_folder(key_blocks, target_folder_name, face_tracking_folder, transfers)
+        blended_folder = None
+        
+        shape_targets = []
+        
+        for src_name, dst_name, unified_name in pairs:
+            source_key = key_blocks[src_name]
+            new_key = core.key.copy(source_key, rename=dst_name)
+            
+            if self.direction == ARKIT_TO_UNIFIED and unified_name in UNIFIED_BLENDED_SHAPES:
+                if blended_folder is None:
+                    blended_folder = _ensure_folder(
+                        key_blocks, BLENDED_SHAPES_FOLDER_NAME, face_tracking_folder, transfers)
+                
+                shape_targets.append((new_key.name, blended_folder.name))
+            else:
+                shape_targets.append((new_key.name, target_folder.name))
+        
+        _apply_transfers(transfers, shape_targets)
+        
+        core.utils.show(hidden)
+        
+        self.report(
+            {'INFO'},
+            core.strings['operators.ShapeKeyTranslateFaceTracking.execute.report[%s Translated]'] % len(pairs))
         
         return {'FINISHED'}
