@@ -81,6 +81,11 @@ class KeyProperties(bpy.types.PropertyGroup):
         type=bpy.types.PropertyGroup,
         name=core.strings['Selections'])
     
+    # Tracked independently of `active_shape_key_index`, because clicking a shape key's row in the
+    # UIList (including its checkbox) updates `active_shape_key_index` via Blender's own row-click
+    # handling before our operator even runs - so it can't be used as a reliable Shift/Ctrl+Click anchor.
+    select_anchor: bpy.props.IntProperty(default=-1)
+    
     copy_customization: bpy.props.PointerProperty(
         type=CopyCustomization,
         name=core.strings['properties.KeyProperties.copy_customization.name'])
