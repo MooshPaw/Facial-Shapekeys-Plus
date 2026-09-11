@@ -113,7 +113,7 @@ MY_CUSTOM_SHAPES = (
     'BrowDownLeft', 'BrowDownRight',
     'BrowInnerUpLeft', 'BrowInnerUpRight',
     'BrowLowererLeft', 'BrowLowererRight',
-    'BrowOuterUpLeft', 'browOuterUpRight',
+    'BrowOuterUpLeft', 'BrowOuterUpRight',
     'BrowPinchLeft', 'BrowPinchRight',
     
     # Cheeks
