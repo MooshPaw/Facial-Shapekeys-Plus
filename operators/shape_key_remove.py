@@ -17,7 +17,7 @@ class OBJECT_OT_skp_shape_key_remove(bpy.types.Operator):
             ('DEFAULT_SELECTED', "", "")
         ),
         default='DEFAULT',
-        options={'HIDDEN'})
+        options={'HIDDEN', 'SKIP_SAVE'})
     
     @classmethod
     def poll(cls, context):

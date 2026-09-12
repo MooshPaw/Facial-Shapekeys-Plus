@@ -19,7 +19,7 @@ class OBJECT_OT_skp_shape_key_add(bpy.types.Operator):
             ('FOLDER', "", "")
         ),
         default='DEFAULT',
-        options={'HIDDEN'})
+        options={'HIDDEN', 'SKIP_SAVE'})
     
     @classmethod
     def poll(cls, context):

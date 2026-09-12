@@ -513,7 +513,7 @@ class OBJECT_OT_skp_shape_key_translate_face_tracking(bpy.types.Operator):
             (ARKIT_TO_UNIFIED, "", ""),
             (UNIFIED_TO_ARKIT, "", "")
         ),
-        options={'HIDDEN'})
+        options={'HIDDEN', 'SKIP_SAVE'})
     
     @classmethod
     def description(cls, context, properties):

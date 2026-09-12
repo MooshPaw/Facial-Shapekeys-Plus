@@ -10,10 +10,10 @@ class OBJECT_OT_skp_shape_key_copy(bpy.types.Operator):
     bl_description = core.strings['operators.ShapeKeyCopy.bl_description']
     bl_options = {'REGISTER', 'UNDO'}
     
-    mirror: bpy.props.IntProperty(options={'HIDDEN'})
-    select: bpy.props.BoolProperty(options={'HIDDEN'})
-    custom: bpy.props.BoolProperty(options={'HIDDEN'})
-    invert: bpy.props.BoolProperty(options={'HIDDEN'})
+    mirror: bpy.props.IntProperty(options={'HIDDEN', 'SKIP_SAVE'})
+    select: bpy.props.BoolProperty(options={'HIDDEN', 'SKIP_SAVE'})
+    custom: bpy.props.BoolProperty(options={'HIDDEN', 'SKIP_SAVE'})
+    invert: bpy.props.BoolProperty(options={'HIDDEN', 'SKIP_SAVE'})
     
     @classmethod
     def poll(cls, context):

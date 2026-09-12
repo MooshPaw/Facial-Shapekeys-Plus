@@ -16,9 +16,9 @@ class OBJECT_OT_skp_shape_key_select(bpy.types.Operator):
             ('NONE', "", ""),
             ('INVERSE', "", "")
         ),
-        options={'HIDDEN'})
+        options={'HIDDEN', 'SKIP_SAVE'})
     
-    index: bpy.props.IntProperty(options={'HIDDEN'})
+    index: bpy.props.IntProperty(options={'HIDDEN', 'SKIP_SAVE'})
     
     @classmethod
     def poll(cls, context):
