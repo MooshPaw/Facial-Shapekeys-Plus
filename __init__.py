@@ -11,7 +11,7 @@ from . import properties
 bl_info = {
     "name": "Facial-Shapekeys+",
     "author": "MooshPaw - Michael Glen Montague",
-    "version": (2, 2, 0),
+    "version": (2, 2, 1),
     "blender": (2, 93, 0),
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
@@ -26,7 +26,7 @@ bl_info = {
 bl_info_en_US = {
     "name": "Facial-Shapekeys+",
     "author": "MooshPaw - Michael Glen Montague",
-    "version": (2, 2, 0),
+    "version": (2, 2, 1),
     "blender": (2, 93, 0),
     "location": "Properties > Object Data > Shape Keys+",
     "description": "Adds a panel with extra options for creating, sorting, viewing, and driving shape keys.",
@@ -38,7 +38,7 @@ bl_info_en_US = {
 bl_info_ja_JP = {
     "name": "Facial-Shapekeys+",
     "author": "MooshPaw - Michael Glen Montague",
-    "version": (2, 2, 0),
+    "version": (2, 2, 1),
     "blender": (2, 93, 0),
     "location": "プロパティ ⇒ オブジェクトデータ ⇒ シェイプキー+",
     "description": "シェイプキーの作成、整理、表示、操作を行うための追加オプションを備えたパネルを追加します。",
