@@ -1,3 +1,17 @@
+v2.3.0
+    - MINOR
+        • Re-added "Invert Shape Key" to the "Other Shape Key Specials" menu. It's the same duplicate-and-
+            invert behavior as "Copy Shape Key, Inverted" (and reuses its already-SKIP_SAVE-protected
+            operator properties), just exposed from both menus.
+        • Added "Translate to MMD", which duplicates existing ARKit or Unified Expressions blend shapes and
+            translates them into their closest MMD (MikuMikuDance) morph equivalent, parenting the results to
+            a standalone "---MMD---" folder (not nested under "---Face Tracking---"). If both ARKit and
+            Unified Expressions shapes are present, only Unified Expressions is used as the source, since its
+            bilateral "Blended Shapes" (e.g. a single combined "EyeClosed") match most MMD morphs more
+            directly than ARKit's separate Left/Right shapes. Only morphs with a clear, documented
+            correspondence to tracking data are included - purely stylistic MMD morphs with no tracking
+            equivalent (highlights, pupil size, blush, etc.) are intentionally left out.
+
 v2.2.0
     - MINOR
         • Reworked the face tracking auto-folder system: "Add ARKit Blend Shapes" now creates its shapes

@@ -82,6 +82,7 @@ _strings_src = {
         "Translate ARKit → Unified Expressions",
     'menus.ShapeKeyAddContextMenu.draw.operator[Translate Unified Expressions -> ARKit]':
         "Translate Unified Expressions → ARKit",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Translate to MMD]': "Translate to MMD",
     
     # shape_keys_plus/menus/shape_key_copy_context_menus.py
     'menus.ShapeKeyCopyContextMenu.bl_label': "Shape Key Copy Specials",
@@ -98,7 +99,8 @@ _strings_src = {
     'menus.ShapeKeyOtherContextMenu.draw.menu[Set Parent...]': "Set Parent...",
     'menus.ShapeKeyOtherContextMenu.draw.operator[Mirror Shape Key]': "Mirror Shape Key",
     'menus.ShapeKeyOtherContextMenu.draw.operator[Mirror Shape Key (Topology)]': "Mirror Shape Key (Topology)",
-    
+    'menus.ShapeKeyOtherContextMenu.draw.operator[Invert Shape Key]': "Invert Shape Key",
+
     # shape_keys_plus/menus/shape_key_parent.py
     'menus.ShapeKeyParent.bl_label': "Set Parent",
     'menus.ShapeKeyParent.draw.operator[New Folder]': "New Folder",
@@ -193,7 +195,16 @@ _strings_src = {
     'operators.ShapeKeyTranslateFaceTracking.execute.report[No Shapes Found]':
         "No matching blend shapes were found to translate",
     'operators.ShapeKeyTranslateFaceTracking.execute.report[%s Translated]': "%s blend shape(s) translated",
-    
+
+    'operators.ShapeKeyTranslateMMD.bl_label': "Translate to MMD",
+    'operators.ShapeKeyTranslateMMD.bl_description':
+        "Duplicates existing ARKit or Unified Expressions blend shapes (Unified Expressions is preferred if "
+        "both are present), translating each one into its closest MMD morph equivalent, and parents the "
+        "results to a standalone \"---MMD---\" folder",
+    'operators.ShapeKeyTranslateMMD.execute.report[No Shapes Found]':
+        "No matching ARKit or Unified Expressions blend shapes were found to translate",
+    'operators.ShapeKeyTranslateMMD.execute.report[%s Translated]': "%s MMD morph(s) translated",
+
     # shape_keys_plus/operators/shape_key_mirror.py
     'operators.ShapeKeyMirror.bl_label': "Mirror Shape Key",
     'operators.ShapeKeyMirror.bl_description': "Mirrors the active or selected shape key(s) along the local X axis",

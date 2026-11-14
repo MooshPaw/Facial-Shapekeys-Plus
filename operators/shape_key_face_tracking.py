@@ -11,6 +11,7 @@ ARKIT_FOLDER_NAME = "---ARKit---"
 UNIFIED_EXPRESSIONS_FOLDER_NAME = "---Unified Expressions---"
 BLENDED_SHAPES_FOLDER_NAME = "---Blended Shapes---"
 VISEMES_FOLDER_NAME = "---Visemes---"
+MMD_FOLDER_NAME = "---MMD---"
 
 # The marker used in MY_CUSTOM_SHAPES to split "Unified Expressions" entries from "Blended Shapes" entries.
 CUSTOM_BLENDED_SHAPES_MARKER = "---Blended Shapes---"
@@ -233,6 +234,43 @@ ARKIT_UNIFIED_PAIRS = (
 
 ARKIT_TO_UNIFIED = 'ARKIT_TO_UNIFIED'
 UNIFIED_TO_ARKIT = 'UNIFIED_TO_ARKIT'
+
+# MMD (MikuMikuDance) model morphs, unlike ARKit/Unified Expressions, aren't a formal tracking spec - they're
+# a community naming convention that most PMX models follow (established by early Vocaloid models and
+# documented across MMD modding wikis/guides). Each entry below is (mmd_name, ue_components, arkit_components):
+# the set of Unified Expressions and/or ARKit shape(s) whose data is duplicated (or, for more than one
+# component, blended together at full strength) to build that MMD morph. Only morphs with a clear,
+# well-documented correspondence to tracking data are included here - purely stylistic MMD morphs with no
+# tracking equivalent (highlights, pupil size, blush, eye sparkle/heart/star variants, etc.) are intentionally
+# left out rather than guessed at. An empty arkit_components tuple means that morph has no sensible ARKit-only
+# equivalent (it relies on a Unified Expressions "Blended Shape" or Base Shape that ARKit has no counterpart
+# for), so it's skipped when translating from ARKit alone.
+MMD_SHAPE_RECIPES = (
+    # Brows
+    ('上', ('BrowUp',), ('browOuterUpLeft', 'browOuterUpRight', 'browInnerUp')),
+    ('下', ('BrowDown',), ('browDownLeft', 'browDownRight')),
+    ('困る', ('BrowInnerUp',), ('browInnerUp',)),
+
+    # Eyes
+    ('まばたき', ('EyeClosed',), ('eyeBlinkLeft', 'eyeBlinkRight')),
+    ('笑い', ('EyeClosed',), ('eyeBlinkLeft', 'eyeBlinkRight')),
+    ('ウィンク', ('EyeClosedLeft',), ('eyeBlinkLeft',)),
+    ('ウィンク右', ('EyeClosedRight',), ('eyeBlinkRight',)),
+    ('びっくり', ('EyeWide',), ('eyeWideLeft', 'eyeWideRight')),
+    ('じと目', ('EyeSquint',), ('eyeSquintLeft', 'eyeSquintRight')),
+
+    # Mouth
+    ('あ', ('JawOpen',), ('jawOpen',)),
+    ('い', ('MouthStretchLeft', 'MouthStretchRight'), ('mouthStretchLeft', 'mouthStretchRight')),
+    ('う', ('LipPucker',), ('mouthPucker',)),
+    ('え', ('JawOpen', 'MouthStretchLeft', 'MouthStretchRight'), ('jawOpen', 'mouthStretchLeft', 'mouthStretchRight')),
+    ('お', ('JawOpen', 'LipFunnel'), ('jawOpen', 'mouthFunnel')),
+    ('ん', ('MouthClosed',), ('mouthClose',)),
+    ('にっこり', ('MouthSmile',), ('mouthSmileLeft', 'mouthSmileRight')),
+    ('にやり', ('MouthCornerPullRight',), ()),
+    ('口角上げ', ('MouthCornerPullLeft', 'MouthCornerPullRight'), ()),
+    ('口角下げ', ('MouthSad',), ('mouthFrownLeft', 'mouthFrownRight')),
+)
 
 
 def _find_folder(key_blocks, name):
@@ -586,5 +624,83 @@ class OBJECT_OT_skp_shape_key_translate_face_tracking(bpy.types.Operator):
         self.report(
             {'INFO'},
             core.strings['operators.ShapeKeyTranslateFaceTracking.execute.report[%s Translated]'] % len(pairs))
-        
+
+        return {'FINISHED'}
+
+
+class OBJECT_OT_skp_shape_key_translate_mmd(bpy.types.Operator):
+    bl_idname = 'object.skp_shape_key_translate_mmd'
+    bl_label = core.strings['operators.ShapeKeyTranslateMMD.bl_label']
+    bl_description = core.strings['operators.ShapeKeyTranslateMMD.bl_description']
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        obj = context.object
+        valid_types = {'MESH', 'LATTICE', 'CURVE', 'SURFACE'}
+
+        return obj and obj.mode != 'EDIT' and obj.type in valid_types and obj.data.shape_keys
+
+    def execute(self, context):
+        obj = context.object
+        key_blocks = obj.data.shape_keys.key_blocks
+
+        has_arkit = any(name in key_blocks for name in ARKIT_SHAPES)
+        has_unified = any(name in key_blocks for name in UNIFIED_BASE_SHAPES + UNIFIED_BLENDED_SHAPES)
+
+        if not has_arkit and not has_unified:
+            self.report({'WARNING'}, core.strings['operators.ShapeKeyTranslateMMD.execute.report[No Shapes Found]'])
+
+            return {'CANCELLED'}
+
+        # If both standards are present, Unified Expressions is preferred: it already provides the bilateral
+        # "Blended Shapes" (e.g. a single, combined "EyeClosed") that most MMD morphs need, where ARKit only
+        # has separate Left/Right primitives.
+        from_unified = has_unified
+
+        created = []
+
+        for mmd_name, ue_components, arkit_components in MMD_SHAPE_RECIPES:
+            if mmd_name in key_blocks:
+                continue
+
+            component_names = ue_components if from_unified else arkit_components
+
+            if not component_names:
+                continue
+
+            source_keys = [key_blocks[name] for name in component_names if name in key_blocks]
+
+            if len(source_keys) != len(component_names):
+                continue
+
+            if len(source_keys) == 1:
+                new_key = core.key.copy(source_keys[0], rename=mmd_name)
+            else:
+                new_key = core.key.blend(source_keys, mmd_name)
+
+            created.append(new_key.name)
+
+        if not created:
+            self.report({'WARNING'}, core.strings['operators.ShapeKeyTranslateMMD.execute.report[No Shapes Found]'])
+
+            return {'CANCELLED'}
+
+        hidden = core.utils.hide(obj)
+
+        # The "---MMD---" folder is intentionally standalone, like "---Visemes---" - not nested under
+        # "---Face Tracking---".
+        mmd_folder = _find_folder(key_blocks, MMD_FOLDER_NAME)
+
+        if not mmd_folder:
+            mmd_folder = _create_folder(MMD_FOLDER_NAME)
+
+        _apply_transfers([], [(name, mmd_folder.name) for name in created])
+
+        core.utils.show(hidden)
+
+        self.report(
+            {'INFO'},
+            core.strings['operators.ShapeKeyTranslateMMD.execute.report[%s Translated]'] % len(created))
+
         return {'FINISHED'}

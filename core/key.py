@@ -70,6 +70,42 @@ def invert_data(key):
     key.data.foreach_set('co', inverted_co)
 
 
+def blend(sources, name):
+    """
+    Creates a new shape key that is the full-strength (value 1.0) combination of the given `sources`
+    (an iterable of bpy.types.ShapeKey), using Blender's native shape_key_add(from_mix=True).
+
+    Every other, non-muted shape key is temporarily muted so it can't bleed into the mix, and every
+    source's value is temporarily forced to 1.0 even if it's currently at 0 or partially blended. Both are
+    restored to their original state afterwards, so nothing about the object's existing shape keys changes.
+    """
+    obj = bpy.context.object
+    key_blocks = obj.data.shape_keys.key_blocks
+    source_indices = {key_blocks.find(key.name) for key in sources}
+    exclude = []
+    forced = []
+
+    for i, key in enumerate(key_blocks):
+        if i in source_indices:
+            if key.value != 1.0:
+                forced.append((i, key.value))
+                key.value = 1.0
+        elif not key.mute:
+            key.mute = True
+            exclude.append(i)
+
+    new_key = obj.shape_key_add(from_mix=True)
+    new_key.name = name
+
+    for i in exclude:
+        key_blocks[i].mute = False
+
+    for i, old_value in forced:
+        key_blocks[i].value = old_value
+
+    return new_key
+
+
 def add(type='DEFAULT'):
     obj = bpy.context.object
     

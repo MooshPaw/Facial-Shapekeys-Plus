@@ -106,6 +106,17 @@ class MESH_MT_skp_shape_key_add_context_menu(bpy.types.Menu):
         
         op.direction = 'UNIFIED_TO_ARKIT'
 
+        layout.separator(factor=0.5)
+
+        row = layout.row()
+        row.enabled = not selections
+
+        row.operator(
+            operator='object.skp_shape_key_translate_mmd',
+            icon='FILE_REFRESH',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Translate to MMD]'],
+            translate=False)
+
 
 class MESH_MT_skp_shape_key_add_context_menu_selected(bpy.types.Menu):
     bl_label = core.strings['menus.ShapeKeyAddContextMenu.bl_label']
