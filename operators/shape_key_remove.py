@@ -25,33 +25,48 @@ class OBJECT_OT_skp_shape_key_remove(bpy.types.Operator):
     
     def execute(self, context):
         obj = bpy.context.object
-        shape_keys = obj.data.shape_keys
-        key_blocks = shape_keys.key_blocks
-        anim = shape_keys.animation_data
+        key_blocks = obj.data.shape_keys.key_blocks
+        
+        # NOTE: Shape keys are removed with core.key.remove(), which removes them by reference. Never use
+        # bpy.ops.object.shape_key_remove() for anything but clearing every key: it deletes whatever key is at the
+        # active index at that moment, which is what used to delete the wrong keys (Basis, the top of a folder...)
+        # whenever the active index wasn't where this operator expected it to be.
         
         if self.type == 'CLEAR':
             bpy.ops.object.shape_key_remove(all=True)
         elif self.type == 'DEFAULT':
+            active_key = obj.active_shape_key
+            
+            if not active_key:
+                return {'CANCELLED'}
+            
+            # Everything below goes by name, and the highlighted key is read exactly once, right here.
+            active_name = active_key.name
+            first_index = key_blocks.find(active_name)
+            
             tree = memory.tree()
-            ancestry = tree.ancestry(obj.active_shape_key.name)
-            location = tree.locate(obj.active_shape_key.name, ancestry[-1])
+            ancestry = tree.ancestry(active_name)
+            location = tree.locate(active_name, ancestry[-1])
+            
+            # The highlighted key, plus everything inside of it if it's a folder.
+            doomed = [active_name] + [key.name for key in core.folder.get_children(active_key)]
+            
+            # Selections are stored as indices, which are about to shift, so they're remembered by name instead.
+            selections = core.key.deselect()
             
             if len(ancestry) > 1:
                 core.folder.shift_block_value(key_blocks[ancestry[-1][0]], 'children', -1)
             
-            active_key = obj.active_shape_key
-            obj.active_shape_key_index += core.folder.get_capacity(active_key)
+            core.key.remove(obj, doomed)
             
-            for key in reversed([active_key] + core.folder.get_children(active_key)):
-                # Remove the driver first.
-                if anim and anim.drivers:
-                    for fc in anim.drivers:
-                        if fc.data_path == "key_blocks[\"%s\"].value" % key.name:
-                            anim.drivers.remove(fc)
+            if obj.data.shape_keys and len(obj.data.shape_keys.key_blocks):
+                key_blocks = obj.data.shape_keys.key_blocks
                 
-                bpy.ops.object.shape_key_remove()
-            
-            if obj.data.shape_keys:
+                # Highlight the key that was right above the removed one, rather than trusting Blender to land there.
+                obj.active_shape_key_index = max(first_index - 1, 0)
+                
+                core.key.reselect(selections)
+                
                 if obj.active_shape_key.name == key_blocks[0].name and len(key_blocks) > 1:
                     # Don't let the reference key be automatically highlighted unless it's the only key left.
                     obj.active_shape_key_index = 1
@@ -70,22 +85,41 @@ class OBJECT_OT_skp_shape_key_remove(bpy.types.Operator):
                             obj.active_shape_key_index = key_blocks.find(location[0][location[1] - 1])
         elif self.type == 'DEFAULT_SELECTED':
             selections = core.key.deselect()
+            selected = set(selections)
+            
+            tree = memory.tree()
+            doomed = []
             
             for name in selections:
-                index = key_blocks.find(name)
-                
-                if index == -1:
+                if name not in key_blocks:
                     continue
-
-                obj.active_shape_key_index = key_blocks.find(name) + core.folder.get_capacity(key_blocks[name])
                 
-                for key in reversed([key_blocks[index]] + core.folder.get_children(key_blocks[index])):
-                    # Remove the driver first.
-                    if anim and anim.drivers:
-                        for fc in anim.drivers:
-                            if fc.data_path == "key_blocks[\"%s\"].value" % key.name:
-                                anim.drivers.remove(fc)
-                    
-                    bpy.ops.object.shape_key_remove()
+                parents = tree.get_parents(name)
+                
+                # This key is inside of a folder that is also selected, so it goes when that folder does.
+                if any(p in selected for p in parents):
+                    continue
+                
+                key = key_blocks[name]
+                
+                if parents:
+                    # The parent folder is losing a child, so it has to be told, or it will start holding on to
+                    # whatever shape keys come after it.
+                    core.folder.shift_block_value(key_blocks[parents[0]], 'children', -1)
+                
+                doomed += [name] + [child.name for child in core.folder.get_children(key)]
+            
+            first_index = min((key_blocks.find(name) for name in doomed), default=0)
+            
+            core.key.remove(obj, doomed)
+            
+            if obj.data.shape_keys and len(obj.data.shape_keys.key_blocks):
+                key_blocks = obj.data.shape_keys.key_blocks
+                
+                obj.active_shape_key_index = max(first_index - 1, 0)
+                
+                if obj.active_shape_key.name == key_blocks[0].name and len(key_blocks) > 1:
+                    # Don't let the reference key be automatically highlighted unless it's the only key left.
+                    obj.active_shape_key_index = 1
         
         return {'FINISHED'}

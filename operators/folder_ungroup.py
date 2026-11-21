@@ -37,12 +37,17 @@ class OBJECT_OT_skp_folder_ungroup(bpy.types.Operator):
             core.folder.shift_block_value(
                 key_blocks[parents[0]], 'children', core.folder.get_block_value(folder, 'children') - 1)
         
-        obj.active_shape_key_index = self.index
-        bpy.ops.object.shape_key_remove()
+        folder_name = folder.name
+        
+        # Removed by reference, so that it can only ever be this folder that goes. See core.key.remove().
+        core.key.remove(obj, [folder_name])
         
         # Fix the active index.
         if active_index != self.index:
             obj.active_shape_key_index = key_blocks.find(active_name)
+        else:
+            # The folder itself was highlighted, so highlight the key that was right above it.
+            obj.active_shape_key_index = max(self.index - 1, 0)
         
         core.key.reselect(selections)
         

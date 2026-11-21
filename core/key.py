@@ -23,13 +23,18 @@ def get_selected_indices():
     
     selections = obj.data.shape_keys.shape_keys_plus.selections
     
-    return sorted(int(x.name) for x in selections if x.name.isdigit())
+    # A set, so that a duplicate entry (from an older version, or a .blend saved with one) can't count twice.
+    return sorted({int(x.name) for x in selections if x.name.isdigit()})
 
 
 def get_selected():
     """Returns a list of selected bpy.types.ShapeKey."""
     # Requires no existence check, because the same one already exists in get_selected_indices().
-    return [bpy.context.object.data.shape_keys.key_blocks[index] for index in get_selected_indices()]
+    key_blocks = bpy.context.object.data.shape_keys.key_blocks
+    
+    # Selections are stored as indices, so one can end up past the end of the list if shape keys were removed
+    # without the selection being updated. Ignore those instead of raising an IndexError.
+    return [key_blocks[index] for index in get_selected_indices() if index < len(key_blocks)]
 
 
 def get_driver(key, fcurve=False):
@@ -195,7 +200,10 @@ def select(i, v):
     i = str(i)
     
     if v:
-        core.utils.get(selections, i, selections.add()).name = i
+        # Not core.utils.get(selections, i, selections.add()): `i` is a string there, so that always fell back to its
+        # default and added a duplicate (plus a nameless entry) every time an already-selected key was selected again.
+        if i not in selections:
+            selections.add().name = i
     else:
         while i in selections:
             selections.remove(selections.find(i))
@@ -214,6 +222,49 @@ def reselect(selections):
         # Check if the shape key hasn't been deleted since the `selections` list was created.
         if name in bpy.context.object.data.shape_keys.key_blocks:
             select(name, True)
+
+
+def remove(obj, names):
+    """
+    Removes the shape keys called `names` (and their drivers) from `obj`, in the order given.
+    
+    Every shape key is removed *by reference*, with `Object.shape_key_remove()`. `bpy.ops.object.shape_key_remove()`
+    is deliberately not used here: that operator deletes whatever shape key happens to be at
+    `Object.active_shape_key_index` at the exact moment it runs, so whenever that index isn't pointing at the key that
+    was meant to go (it was left somewhere else by an earlier add/move/parent, it's relying on the index shifting by
+    exactly the right amount after every removal, etc.), the wrong key is deleted, and every removal after it repeats
+    the mistake. Removing by reference can only ever delete the key that was asked for.
+    
+    Blender nudges the active shape key index on its own as keys disappear, so callers should set
+    `Object.active_shape_key_index` themselves afterwards. Don't keep any `bpy.types.ShapeKey` of the removed keys
+    around afterwards either, since they become invalid. Hold on to their names instead.
+    """
+    for name in names:
+        # Fetched every time, because it is not safe to hold on to these across a removal.
+        shape_keys = obj.data.shape_keys
+        
+        if not shape_keys:
+            return
+        
+        key_blocks = shape_keys.key_blocks
+        index = key_blocks.find(name)
+        
+        if index == -1:
+            # Already gone, e.g. a child of a folder that was removed earlier in this same list.
+            continue
+        
+        key = key_blocks[index]
+        anim = shape_keys.animation_data
+        
+        # Remove the driver first. The matching drivers are collected before any of them are removed, because
+        # removing an F-curve while iterating over `anim.drivers` invalidates the iterator.
+        if anim and anim.drivers:
+            data_path = "key_blocks[\"%s\"].value" % name
+            
+            for fc in [fc for fc in anim.drivers if fc.data_path == data_path]:
+                anim.drivers.remove(fc)
+        
+        obj.shape_key_remove(key)
 
 
 def copy(original_key, mirror=0, custom=False, invert=False, rename=None):

@@ -1,3 +1,12 @@
+v2.3.1
+    - PATCH
+        • Fixed an issue where removing a shape key sometimes deleted the wrong one, hard to recreate but was probably a desync between blender's "selected" shapekey and the addon's highlighted one
+        • Fixed "Remove Selected Shape Keys" not telling a selected key's parent folder that it had lost a
+            child, which made that folder swallow the shape keys listed after it and corrupted the hierarchy.
+        • Fixed selecting an already-selected shape key (Shift/Ctrl+Click, etc.) adding a duplicate entry to the
+            selection, which doubled that key up in "Selected (N)" and in anything done to the selection.
+        • A leftover selection pointing past the end of the shape key list can no longer cause an error.
+
 v2.3.0
     - MINOR
         • Re-added "Invert Shape Key" to the "Other Shape Key Specials" menu. It's the same duplicate-and-
