@@ -150,6 +150,11 @@ class MESH_UL_shape_keys_plus(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index=0, flt_flag=0):
         obj = active_data
         shape_keys = obj.data.shape_keys
+        
+        # The object can lose its shape keys (or be swapped out, e.g. by an import) between building the list and drawing it.
+        if not shape_keys:
+            return
+        
         key_blocks = shape_keys.key_blocks
         
         tree = memory.tree.active
@@ -319,6 +324,9 @@ class MESH_UL_shape_keys_plus(bpy.types.UIList):
         flt_flags = []
         flt_name_flags = []
         flt_neworder = []
+        
+        if not data:
+            return flt_flags, flt_neworder
         
         key_blocks = data.key_blocks
         helper_funcs = bpy.types.UI_UL_list

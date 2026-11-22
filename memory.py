@@ -207,6 +207,10 @@ class Tree:
         """Sorts the object's shape keys according to this Tree."""
         
         obj = bpy.context.object
+        
+        if not obj or not obj.data.shape_keys:
+            return
+        
         key_blocks = obj.data.shape_keys.key_blocks
         
         for destination, name in enumerate(core.utils.flatten(self.tree)):

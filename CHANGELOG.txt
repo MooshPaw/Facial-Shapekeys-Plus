@@ -2,6 +2,7 @@ v2.4.0
     - PATCH
         • "Invert Shape Key" is now in the same menu section as "Mirror Shape Key".
         • Moved "Translate to MMD" into the same menu section as the other "Translate" actions.
+        • Fixed "'NoneType' object has no attribute 'key_blocks'" being raised while drawing the panel for an object with no shape keys (such as a freshly imported model).
     - FEATURE
         • Added "Update UE Blended Shapes" to the "Other Shape Key Specials" menu, below "Invert Shape Key".
         • It looks for Unified Expressions Blended Shapes already on the model (e.g. "LipFunnel") and rebuilds each one from the regular shapes it's made of (e.g. "LipFunnelUpperLeft", "LipFunnelUpperRight", "LipFunnelLowerLeft" and "LipFunnelLowerRight"), like running "Blend from Shape" on each of them. Blended Shapes the model doesn't have are skipped, and so are ones with none of their regular shapes present.

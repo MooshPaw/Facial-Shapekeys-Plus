@@ -29,8 +29,14 @@ def get_selected_indices():
 
 def get_selected():
     """Returns a list of selected bpy.types.ShapeKey."""
-    # Requires no existence check, because the same one already exists in get_selected_indices().
-    key_blocks = bpy.context.object.data.shape_keys.key_blocks
+    obj = bpy.context.object
+    
+    # The panel and the menus call this on every redraw, including for objects that have no shape keys yet (e.g. right
+    # after importing a model), where `shape_keys` is None.
+    if not obj or not obj.data.shape_keys:
+        return []
+    
+    key_blocks = obj.data.shape_keys.key_blocks
     
     # Selections are stored as indices, so one can end up past the end of the list if shape keys were removed
     # without the selection being updated. Ignore those instead of raising an IndexError.
