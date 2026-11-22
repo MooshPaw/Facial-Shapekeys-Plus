@@ -111,11 +111,10 @@ UNIFIED_BLENDED_SHAPES = (
 # comment it (and everything after it) out to exclude Blended Shapes from the custom set entirely.
 MY_CUSTOM_SHAPES = (
     # Eye Brows
-    'BrowDownLeft', 'BrowDownRight',
-    'BrowInnerUpLeft', 'BrowInnerUpRight',
-    'BrowLowererLeft', 'BrowLowererRight',
-    'BrowOuterUpLeft', 'BrowOuterUpRight',
     'BrowPinchLeft', 'BrowPinchRight',
+    'BrowLowererLeft', 'BrowLowererRight',
+    'BrowInnerUpLeft', 'BrowInnerUpRight',
+    'BrowOuterUpLeft', 'BrowOuterUpRight',
     
     # Cheeks
     'CheekPuffLeft', 'CheekPuffRight',
@@ -134,24 +133,26 @@ MY_CUSTOM_SHAPES = (
     'EyeConstrictLeft', 'EyeConstrictRight',
     
     # Jaw
-    'JawBackward', 'JawForward',
-    'JawLeft', 'JawOpen', 'JawRight',
+    'JawOpen', 'MouthClosed',
+    'JawLeft', 'JawRight',
+    'JawForward', 'JawBackward',
+    'JawClench',
     
     # Lips
     'LipSuckUpperLeft', 'LipSuckUpperRight',
     'LipSuckLowerLeft', 'LipSuckLowerRight',
+    'LipSuckCornerLeft', 'LipSuckCornerRight',
     
     # Mouth
-    'MouthClosed',
     'MouthDimpleLeft', 'MouthDimpleRight',
     'MouthFrownLeft', 'MouthFrownRight',
-    'MouthLeft', 'MouthRight',
     'MouthPressLeft', 'MouthPressRight',
     'MouthRaiserUpper', 'MouthRaiserLower',
-    'MouthSmileLeft', 'mouthSmileRight',
     'MouthStretchLeft', 'MouthStretchRight',
     'MouthUpperUpLeft', 'MouthUpperUpRight',
     'MouthLowerDownLeft', 'MouthLowerDownRight',
+    'MouthUpperDeepenLeft', 'MouthUpperDeepenRight',
+    'MouthTightenerLeft', 'MouthTightenerRight',
     
     # Nose
     'NoseSneerLeft', 'NoseSneerRight',
@@ -169,12 +170,13 @@ MY_CUSTOM_SHAPES = (
     
     # IF YOU DON'T PLAN ON USING BLENDED SHAPES, PUT A # NEXT TO '---BLENDED SHAPES---,'
     '---Blended Shapes---',
+    'BrowDownLeft', 'BrowDownRight',
     'BrowInnerUp',
     'CheekPuff',
-    'LipSuckLower',
-    'LipSuckUpper',
+    'LipSuckLower', 'LipSuckUpper',
     'LipFunnel', 'LipPucker',
-    'EyesLookDown', 'EyesLookUp',
+    'MouthLeft', 'MouthRight',
+    'MouthSmileLeft', 'mouthSmileRight',
 )
 
 # The official ARKit <-> Unified Expressions conversion table (docs.vrcft.io/.../compatibility/arkit).

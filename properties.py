@@ -76,9 +76,16 @@ class CopyCustomization(bpy.types.PropertyGroup):
     mirrored_topology: bpy.props.BoolProperty(name=core.strings['properties.CopyCustomization.mirrored_topology.name'])
 
 
+class SelectionItem(bpy.types.PropertyGroup):
+    # One selected shape key, stored as its index in a string. This has its own `name` property because the bare
+    # bpy.types.PropertyGroup's `name` is read-only in newer versions of Blender, so `selections.add().name = i` raised
+    # "attribute "name" from "PropertyGroup" is read-only" and nothing could be selected.
+    name: bpy.props.StringProperty()
+
+
 class KeyProperties(bpy.types.PropertyGroup):
     selections: bpy.props.CollectionProperty(
-        type=bpy.types.PropertyGroup,
+        type=SelectionItem,
         name=core.strings['Selections'])
     
     # Tracked independently of `active_shape_key_index`, because clicking a shape key's row in the
