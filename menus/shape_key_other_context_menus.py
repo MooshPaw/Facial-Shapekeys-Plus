@@ -66,8 +66,6 @@ class MESH_MT_skp_shape_key_other_context_menu(bpy.types.Menu):
         op.select = False
         op.use_topology = True
 
-        layout.separator(factor=0.5)
-
         row = layout.row()
         row.enabled = not selections
 
@@ -81,6 +79,17 @@ class MESH_MT_skp_shape_key_other_context_menu(bpy.types.Menu):
         op.select = False
         op.custom = False
         op.invert = True
+
+        layout.separator(factor=0.5)
+
+        row = layout.row()
+        row.enabled = not selections
+
+        row.operator(
+            operator='object.skp_shape_key_update_unified_blended',
+            icon='FILE_REFRESH',
+            text=core.strings['menus.ShapeKeyAddContextMenu.draw.operator[Update UE Blended Shapes]'],
+            translate=False)
 
         layout.separator(factor=0.5)
 
@@ -128,8 +137,6 @@ class MESH_MT_skp_shape_key_other_context_menu_selected(bpy.types.Menu):
         
         op.select = True
         op.use_topology = True
-
-        layout.separator(factor=0.5)
 
         op = layout.operator(
             operator='object.skp_shape_key_copy',

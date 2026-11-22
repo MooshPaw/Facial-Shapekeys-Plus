@@ -273,6 +273,73 @@ MMD_SHAPE_RECIPES = (
 )
 
 
+def _lr(name):
+    """Returns the Left and Right Base Shape names for `name` (e.g. 'EyeClosed' -> EyeClosedLeft, EyeClosedRight)."""
+    return name + 'Left', name + 'Right'
+
+
+# Each Unified Expressions "Blended Shape" and the Base Shapes whose poses it combines. Always written in terms
+# of Base Shapes only (never other Blended Shapes), so the result never depends on the order they're updated in.
+# NOTE: edit this table if your rig combines a Blended Shape differently.
+UNIFIED_BLENDED_RECIPES = (
+    # Eyes
+    ('EyeClosed', _lr('EyeClosed')),
+    ('EyeWide', _lr('EyeWide')),
+    ('EyeSquint', _lr('EyeSquint')),
+    ('EyeDilation', _lr('EyeDilation')),
+    ('EyeConstrict', _lr('EyeConstrict')),
+
+    # Brows
+    ('BrowDownRight', ('BrowLowererRight', 'BrowPinchRight')),
+    ('BrowDownLeft', ('BrowLowererLeft', 'BrowPinchLeft')),
+    ('BrowDown', ('BrowLowererRight', 'BrowPinchRight', 'BrowLowererLeft', 'BrowPinchLeft')),
+    ('BrowInnerUp', _lr('BrowInnerUp')),
+    ('BrowUpRight', ('BrowInnerUpRight', 'BrowOuterUpRight')),
+    ('BrowUpLeft', ('BrowInnerUpLeft', 'BrowOuterUpLeft')),
+    ('BrowUp', ('BrowInnerUpRight', 'BrowOuterUpRight', 'BrowInnerUpLeft', 'BrowOuterUpLeft')),
+
+    # Nose / Cheeks
+    ('NoseSneer', _lr('NoseSneer')),
+    ('NasalDilation', _lr('NasalDilation')),
+    ('NasalConstrict', _lr('NasalConstrict')),
+    ('CheekPuff', _lr('CheekPuff')),
+    ('CheekSuck', _lr('CheekSuck')),
+    ('CheekSquint', _lr('CheekSquint')),
+
+    # Lips
+    ('LipSuckUpper', _lr('LipSuckUpper')),
+    ('LipSuckLower', _lr('LipSuckLower')),
+    ('LipSuck', _lr('LipSuckUpper') + _lr('LipSuckLower')),
+    ('LipFunnelUpper', _lr('LipFunnelUpper')),
+    ('LipFunnelLower', _lr('LipFunnelLower')),
+    ('LipFunnel', _lr('LipFunnelUpper') + _lr('LipFunnelLower')),
+    ('LipPuckerUpper', _lr('LipPuckerUpper')),
+    ('LipPuckerLower', _lr('LipPuckerLower')),
+    ('LipPucker', _lr('LipPuckerUpper') + _lr('LipPuckerLower')),
+
+    # Mouth
+    ('MouthUpperUp', _lr('MouthUpperUp')),
+    ('MouthLowerDown', _lr('MouthLowerDown')),
+    ('MouthOpen', _lr('MouthUpperUp') + _lr('MouthLowerDown')),
+    ('MouthRight', ('MouthUpperRight', 'MouthLowerRight')),
+    ('MouthLeft', ('MouthUpperLeft', 'MouthLowerLeft')),
+    ('MouthSmileRight', ('MouthCornerPullRight', 'MouthCornerSlantRight')),
+    ('MouthSmileLeft', ('MouthCornerPullLeft', 'MouthCornerSlantLeft')),
+    ('MouthSmile', ('MouthCornerPullRight', 'MouthCornerSlantRight', 'MouthCornerPullLeft', 'MouthCornerSlantLeft')),
+    ('MouthSadRight', ('MouthFrownRight', 'MouthStretchRight')),
+    ('MouthSadLeft', ('MouthFrownLeft', 'MouthStretchLeft')),
+    ('MouthSad', ('MouthFrownRight', 'MouthStretchRight', 'MouthFrownLeft', 'MouthStretchLeft')),
+    ('MouthStretch', _lr('MouthStretch')),
+    ('MouthDimple', _lr('MouthDimple')),
+    ('MouthTightener', _lr('MouthTightener')),
+    ('MouthPress', _lr('MouthPress')),
+
+    # Extra Blended Shapes from MY_CUSTOM_SHAPES that aren't part of the official list.
+    ('EyesLookDown', _lr('EyeLookDown')),
+    ('EyesLookUp', _lr('EyeLookUp')),
+)
+
+
 def _find_folder(key_blocks, name):
     for key in key_blocks:
         if core.key.is_folder(key) and key.name == name:
@@ -704,3 +771,88 @@ class OBJECT_OT_skp_shape_key_translate_mmd(bpy.types.Operator):
             core.strings['operators.ShapeKeyTranslateMMD.execute.report[%s Translated]'] % len(created))
 
         return {'FINISHED'}
+
+
+class OBJECT_OT_skp_shape_key_update_unified_blended(bpy.types.Operator):
+    bl_idname = 'object.skp_shape_key_update_unified_blended'
+    bl_label = core.strings['operators.ShapeKeyUpdateUnifiedBlended.bl_label']
+    bl_description = core.strings['operators.ShapeKeyUpdateUnifiedBlended.bl_description']
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        obj = context.object
+        valid_types = {'MESH', 'LATTICE', 'CURVE', 'SURFACE'}
+
+        return obj and obj.mode != 'EDIT' and obj.type in valid_types and obj.data.shape_keys
+
+    def execute(self, context):
+        obj = context.object
+        key_blocks = obj.data.shape_keys.key_blocks
+
+        updated = 0
+
+        for blended_name, component_names in UNIFIED_BLENDED_RECIPES:
+            target = key_blocks.get(blended_name)
+
+            # The model doesn't have this Blended Shape (e.g. no "EyeClosed"), so skip it.
+            if target is None or core.key.is_folder(target):
+                continue
+
+            components = []
+
+            for name in component_names:
+                key = key_blocks.get(name)
+
+                if key is not None and key is not target and not core.key.is_folder(key):
+                    components.append(key)
+
+            # None of the regular shapes it's made from exist on the model, so there's nothing to blend from.
+            if not components:
+                continue
+
+            _blend_from_shapes(target, components)
+
+            updated += 1
+
+        if not updated:
+            self.report(
+                {'WARNING'},
+                core.strings['operators.ShapeKeyUpdateUnifiedBlended.execute.report[No Shapes Found]'])
+
+            return {'CANCELLED'}
+
+        obj.data.update()
+
+        self.report(
+            {'INFO'},
+            core.strings['operators.ShapeKeyUpdateUnifiedBlended.execute.report[%s Updated]'] % updated)
+
+        return {'FINISHED'}
+
+
+def _blend_from_shapes(target, components):
+    """
+    Rebuilds `target` from scratch as its relative key plus the full-strength offset of every shape in
+    `components` (each offset measured against that component's own relative key, normally the Basis).
+
+    This is the same result as running "Blend from Shape" (Additive, Blend 1.0) for each component on an
+    otherwise reset shape key, but works directly on the shape key data, so it doesn't need Edit Mode, doesn't
+    change the selection and doesn't depend on any vertex being selected.
+    """
+    import numpy as np
+
+    count = len(target.data) * 3
+    buffer = np.empty(count, dtype=np.float32)
+
+    target.relative_key.data.foreach_get('co', buffer)
+    result = buffer.copy()
+
+    for component in components:
+        component.data.foreach_get('co', buffer)
+        result += buffer
+
+        component.relative_key.data.foreach_get('co', buffer)
+        result -= buffer
+
+    target.data.foreach_set('co', result)

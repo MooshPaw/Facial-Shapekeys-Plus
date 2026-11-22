@@ -1,3 +1,11 @@
+v2.4.0
+    - PATCH
+        • "Invert Shape Key" is now in the same menu section as "Mirror Shape Key".
+        • Moved "Translate to MMD" into the same menu section as the other "Translate" actions.
+    - FEATURE
+        • Added "Update UE Blended Shapes" to the "Other Shape Key Specials" menu, below "Invert Shape Key".
+        • It looks for Unified Expressions Blended Shapes already on the model (e.g. "LipFunnel") and rebuilds each one from the regular shapes it's made of (e.g. "LipFunnelUpperLeft", "LipFunnelUpperRight", "LipFunnelLowerLeft" and "LipFunnelLowerRight"), like running "Blend from Shape" on each of them. Blended Shapes the model doesn't have are skipped, and so are ones with none of their regular shapes present.
+
 v2.3.1
     - PATCH
         • Fixed an issue where removing a shape key sometimes deleted the wrong one, hard to recreate but was probably a desync between blender's "selected" shapekey and the addon's highlighted one

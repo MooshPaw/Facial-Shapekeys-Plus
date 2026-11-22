@@ -422,6 +422,7 @@ classes = (
     operators.ShapeKeyAddVisemes,
     operators.ShapeKeyTranslateFaceTracking,
     operators.ShapeKeyTranslateMMD,
+    operators.ShapeKeyUpdateUnifiedBlended,
     operators.ShapeKeyCopy,
     operators.ShapeKeyMirror,
     operators.ShapeKeyMove,

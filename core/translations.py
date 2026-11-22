@@ -83,6 +83,7 @@ _strings_src = {
     'menus.ShapeKeyAddContextMenu.draw.operator[Translate Unified Expressions -> ARKit]':
         "Translate Unified Expressions → ARKit",
     'menus.ShapeKeyAddContextMenu.draw.operator[Translate to MMD]': "Translate to MMD",
+    'menus.ShapeKeyAddContextMenu.draw.operator[Update UE Blended Shapes]': "Update UE Blended Shapes",
     
     # shape_keys_plus/menus/shape_key_copy_context_menus.py
     'menus.ShapeKeyCopyContextMenu.bl_label': "Shape Key Copy Specials",
@@ -204,6 +205,13 @@ _strings_src = {
     'operators.ShapeKeyTranslateMMD.execute.report[No Shapes Found]':
         "No matching ARKit or Unified Expressions blend shapes were found to translate",
     'operators.ShapeKeyTranslateMMD.execute.report[%s Translated]': "%s MMD morph(s) translated",
+
+    'operators.ShapeKeyUpdateUnifiedBlended.bl_label': "Update UE Blended Shapes",
+    'operators.ShapeKeyUpdateUnifiedBlended.bl_description':
+        "Updates Unified Expression Blended Shapes with the poses from the regular shapes.",
+    'operators.ShapeKeyUpdateUnifiedBlended.execute.report[No Shapes Found]':
+        "No Unified Expressions Blended Shapes with matching regular shapes were found on this model",
+    'operators.ShapeKeyUpdateUnifiedBlended.execute.report[%s Updated]': "%s blended shape(s) updated",
 
     # shape_keys_plus/operators/shape_key_mirror.py
     'operators.ShapeKeyMirror.bl_label': "Mirror Shape Key",
